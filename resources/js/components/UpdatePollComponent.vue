@@ -33,19 +33,14 @@
                         </div>
 
                         <div class="mb-4">
-                            <label class="block text-gray-700 text-sm font-bold mb-2" for="pollQuestion">Start date</label>
-                            <input v-model="question.start_date" type="date" name="start_date" id="start_date" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+                            <label class="block text-gray-700 text-sm font-bold mb-2" for="pollQuestion">Available from:</label>
+                            <DatePicker v-model="question.start_date" :lowerLimit="new Date()" name="start_date" id="start_date" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"></DatePicker>
                         </div>
 
                         <div class="mb-4">
-                            <label class="block text-gray-700 text-sm font-bold mb-2" for="pollQuestion">End date</label>
-                            <input v-model="question.end_date" type="date" name="end_date" id="end_date" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+                            <label class="block text-gray-700 text-sm font-bold mb-2" for="pollQuestion">Available till:</label>
+                            <DatePicker v-model="question.end_date" :lowerLimit="question.start_date" name="end_date" id="end_date" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"></DatePicker>
                         </div>
-
-                        <button @click="addOption" type="button"
-                                class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-                            Add Option
-                        </button>
 
                         <div class="mt-5">
                             <button type="submit"
@@ -71,9 +66,9 @@
 import {PencilIcon} from '@heroicons/vue/24/outline';
 import axios from 'axios';
 import Errors from "./Errors.vue";
-
+import DatePicker from "vue3-datepicker";
 export default {
-    components:{Errors, PencilIcon},
+    components:{Errors, PencilIcon, DatePicker},
     props: {
         question: {
             type: Object,
@@ -85,6 +80,10 @@ export default {
             errors: [],
             showModal: false,
         };
+    },
+    mounted() {
+        this.question.start_date = new Date(this.question.start_date);
+        this.question.end_date = new Date(this.question.end_date);
     },
     methods: {
         initializeComponent() {

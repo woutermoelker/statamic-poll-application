@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -16,11 +17,12 @@ class QuestionFactory extends Factory
      */
     public function definition(): array
     {
+        $now = Carbon::now();
         return [
             "question" => $this->faker->realText(20),
             "type" => $this->faker->randomElement(['radio', 'checkbox']),
-            "start_date" => $this->faker->dateTimeBetween('-1 year', '+1 year'),
-            "end_date" => $this->faker->dateTimeBetween('-1 year', '+1 year'),
+            "start_date" => $now,
+            "end_date" => $this->faker->dateTimeBetween($now, '+1 month'),
         ];
     }
 }

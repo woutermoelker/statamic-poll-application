@@ -39,7 +39,7 @@
 
                         <div class="mb-4">
                             <label class="block text-gray-700 text-sm font-bold mb-2" for="pollQuestion">Available till:</label>
-                            <DatePicker v-model="newPoll.endDate" :lowerLimit="new Date()" name="end_date" id="end_date" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"></DatePicker>
+                            <DatePicker v-model="newPoll.endDate" :lowerLimit="newPoll.startDate || new Date()" name="end_date" id="end_date" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"></DatePicker>
                         </div>
 
                         <div class="mb-4">
@@ -116,6 +116,7 @@ export default {
         };
     },
     mounted() {
+
         this.now = moment().format('YYYY-MM-DD');
     },
     methods: {
