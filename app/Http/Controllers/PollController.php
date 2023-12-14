@@ -26,7 +26,6 @@ class PollController extends Controller
 
     public function createPoll(Request $request)
     {
-
         // Validate the request data
         $validatedData = $request->validate([
             'question' => 'required|string|max:255',
@@ -36,6 +35,7 @@ class PollController extends Controller
             'type' => 'required|string|max:255',
             'options.*.option_text' => 'required|string|max:255'
         ]);
+
         // Create the poll
         $poll = Question::create([
             'start_date' => $validatedData['start_date'],

@@ -24,6 +24,12 @@
                             <input type="text" :id="'option' + index" v-model="option.option_text"
                                    class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline">
                         </div>
+
+                        <button @click="addOption" type="button"
+                                class="bg-blue-500 mb-4 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                            Add Option
+                        </button>
+
                         <div class="mb-4">
                             <label class="block text-gray-700 text-sm font-bold mb-2" for="pollQuestion">Poll type:</label>
                             <select v-model="newPoll.type" name="type" id="type" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
@@ -37,7 +43,7 @@
                             <DatePicker v-model="newPoll.startDate" :lowerLimit="new Date()" name="start_date" id="start_date" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"></DatePicker>
                         </div>
 
-                        <div class="mb-4">
+                        <div class="mb-4" v-if="newPoll.startDate">
                             <label class="block text-gray-700 text-sm font-bold mb-2" for="pollQuestion">Available till:</label>
                             <DatePicker v-model="newPoll.endDate" :lowerLimit="newPoll.startDate || new Date()" name="end_date" id="end_date" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"></DatePicker>
                         </div>
@@ -56,10 +62,7 @@
 
 
 
-                        <button @click="addOption" type="button"
-                                class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-                            Add Option
-                        </button>
+
 
                         <div class="mt-5">
                             <button type="submit"
@@ -116,8 +119,7 @@ export default {
         };
     },
     mounted() {
-
-        this.now = moment().format('YYYY-MM-DD');
+        this.newPoll.startDate =new Date();
     },
     methods: {
         onImageChange(e) {
@@ -135,11 +137,24 @@ export default {
             this.selectedVideo = null;
         },
         async createPoll() {
+
+            if(this.newPoll.startDate) {
+                this.newPoll.startDate = moment(this.newPoll.startDate).format('YYYY-MM-DD');
+            } else {
+                this.newPoll.startDate = '';
+            }
+
+            if(this.newPoll.endDate) {
+                this.newPoll.endDate = moment(this.newPoll.endDate).format('YYYY-MM-DD');
+            } else {
+                this.newPoll.endDate = '';
+            }
+
             const formData = new FormData();
             formData.append('question', this.newPoll.questionText);
             formData.append('type', this.newPoll.type);
-            formData.append('start_date', moment(this.newPoll.startDate).format('YYYY-MM-DD HH:mm:ss'));
-            formData.append('end_date', moment(this.newPoll.endDate).format('YYYY-MM-DD HH:mm:ss'));
+            formData.append('start_date', this.newPoll.startDate);
+            formData.append('end_date', this.newPoll.endDate);
 
             // Append each option as a separate field
             this.newPoll.options.forEach((option, index) => {
