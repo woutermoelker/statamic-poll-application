@@ -1,16 +1,18 @@
 ---
-title: Home
 id: home
-template: home
 blueprint: pages
+title: Home
+template: home
+author: efae2f12-56ea-40a5-ba24-9c91e40618c4
+updated_by: efae2f12-56ea-40a5-ba24-9c91e40618c4
+updated_at: 1702572158
 ---
-## Welcome to your brand new Statamic site!
+## Welkom bij de polling applicatie!
 
-Not sure where to do next? Here are a few ideas, but feel free to explore in your own way, in your own time.
+De door mij ontwikkelde [poll-applicatie](/poll) is een interactief platform gebouwd met Laravel, waar gebruikers hun mening kunnen geven door te stemmen op verschillende polls. Dit systeem biedt een eenvoudige en intuïtieve interface voor zowel bezoekers als beheerders.
 
-- [Jump into the Control Panel](/cp) and edit this page or begin setting up your own collections and blueprints.
-- [Head to the docs](https://statamic.dev) and learn how Statamic works.
-- [Watch some Statamic videos](https://youtube.com/statamic) on YouTube.
-- [Join our Discord chat](https://statamic.com/discord) and meet thousands of other Statamic developers.
-- [Start a discussion](https://github.com/statamic/cms/discussions) and get answers to your questions.
-- [Star Statamic on Github](https://github.com/statamic/cms) if you enjoy using it!
+Voor Bezoekers:
+Bezoekers van de website kunnen verschillende actieve polls bekijken en hun stem uitbrengen op de poll die hen interesseert. Elke poll bestaat uit een vraag met meerdere antwoordopties, allen ingevoerd als vrije tekstvelden. Na het stemmen krijgen de gebruikers direct de actuele uitslagen te zien, wat een transparante weergave van de publieke opinie biedt. Om de integriteit van de stemming te waarborgen, is er een validatiesysteem geïmplementeerd dat voorkomt dat bezoekers meer dan één keer op dezelfde poll stemmen.
+
+Voor Beheerders:
+Beheerders hebben de mogelijkheid om nieuwe polls te creëren, bestaande polls te wijzigen of te verwijderen. Ze kunnen vragen en antwoordopties toevoegen, wijzigen en verwijderen. Een belangrijke functionaliteit is de optie om een publicatiedatum en tijd in te stellen, waardoor een poll pas beschikbaar wordt op een specifiek moment. Indien geen datum is ingesteld, is de poll direct beschikbaar. Daarnaast kunnen beheerders ook een einddatum instellen, waarna de poll sluit en alleen de resultaten zichtbaar zijn.

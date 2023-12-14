@@ -18,6 +18,8 @@
         "@vitejs/plugin-vue": "^4.5.2",
         "@vue-hero-icons/outline": "^1.7.2",
         "axios": "^1.6.2",
-        "vue": "^3.3.11"
+        "moment": "^2.29.4",
+        "vue": "^3.3.11",
+        "vue3-datepicker": "^0.4.0"
     }
 }

@@ -3,3 +3,7 @@
 @import "tailwindcss/utilities";
 
 /* This is all you. */
+
+.concept7-bg {
+    background-color: #220045;
+}

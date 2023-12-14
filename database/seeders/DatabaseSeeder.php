@@ -45,12 +45,12 @@ class DatabaseSeeder extends Seeder
                 'question_id' => $question->id
             ]);
 
-            $options->each(function ($option) use ($question) {
-                Vote::factory(rand(0, 20))->create([
-                    'question_id' => $question->id,
-                    'option_id' => $option->id
-                ]);
-            });
+//            $options->each(function ($option) use ($question) {
+//                Vote::factory(rand(0, 20))->create([
+//                    'question_id' => $question->id,
+//                    'option_id' => $option->id
+//                ]);
+//            });
         });
     }
 }

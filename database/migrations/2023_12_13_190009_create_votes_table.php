@@ -14,7 +14,8 @@ return new class extends Migration
         Schema::create('votes', function (Blueprint $table) {
             $table->id();
             $table->foreignId('question_id')->constrained();
-            $table->foreignId('option_id')->constrained();
+            $table->foreignId('option_id')->constrained()->references('id')->on('options')
+                ->onDelete('cascade');;
             $table->string('fingerprint');
             $table->timestamps();
         });

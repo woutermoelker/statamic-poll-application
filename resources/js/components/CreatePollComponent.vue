@@ -1,7 +1,7 @@
 <template>
     <!-- Button to Toggle Modal -->
     <button @click="showModal = true"
-            class="bg-blue-500 fixed left-10 bottom-10 h-10 w-10 text-center rounded-full hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+            class="concept7-bg bounce fixed left-10 bottom-10 h-10 w-10 text-center rounded-full hover:bg-purple-700 text-white font-bold py-2 px-4 rounded">
         <PlusIcon class="absolute left-0 top-0 text-white h-10 w-10"></PlusIcon>
     </button>
 
@@ -33,13 +33,25 @@
                         </div>
 
                         <div class="mb-4">
-                            <label class="block text-gray-700 text-sm font-bold mb-2" for="pollQuestion">Poll type:</label>
-                            <input v-model="newPoll.startDate" type="date" name="start_date" id="start_date" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+                            <label class="block text-gray-700 text-sm font-bold mb-2" for="pollQuestion">Available from:</label>
+                            <DatePicker v-model="newPoll.startDate" :lowerLimit="new Date()" name="start_date" id="start_date" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"></DatePicker>
                         </div>
 
                         <div class="mb-4">
-                            <label class="block text-gray-700 text-sm font-bold mb-2" for="pollQuestion">Poll type:</label>
-                            <input v-model="newPoll.endDate" type="date" name="end_date" id="end_date" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+                            <label class="block text-gray-700 text-sm font-bold mb-2" for="pollQuestion">Available till:</label>
+                            <DatePicker v-model="newPoll.endDate" :lowerLimit="new Date()" name="end_date" id="end_date" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"></DatePicker>
+                        </div>
+
+                        <div class="mb-4">
+                            <label class="block text-gray-700 text-sm font-bold mb-2" for="pollImage">Poll Image:</label>
+                            <input type="file" id="pollImage" @change="onImageChange" accept="image/*"
+                                   class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+                        </div>
+
+                        <div class="mb-4">
+                            <label class="block text-gray-700 text-sm font-bold mb-2" for="pollVideo">Poll Video:</label>
+                            <input type="file" id="pollVideo" @change="onVideoChange" accept="video/*"
+                                   class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
                         </div>
 
 
@@ -63,6 +75,7 @@
                         class="mt-3 bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
                     Close
                 </button>
+                <Errors :errors="errors"></Errors>
             </div>
         </div>
     </div>
@@ -72,47 +85,89 @@
 import {PlusIcon} from "@heroicons/vue/24/solid";
 import axios from 'axios';
 import MediaUpload from "./MediaUpload.vue";
+import Errors from "./Errors.vue";
+import DatePicker from 'vue3-datepicker'
+import moment from "moment";
+
 
 export default {
+
     components: {
+        Errors,
         PlusIcon,
-        MediaUpload
+        MediaUpload,
+        DatePicker,
     },
     data() {
         return {
             showModal: false,
+            now: '',
             newPoll: {
-                startDate: null,
-                endDate: null,
+                startDate: '',
+                endDate: '',
                 questionText: '',
                 type:'radio',
                 options: [{ option_text: '' }],
+
             },
+            errors: [],
+            selectedImage: null,
+            selectedVideo: null,
         };
     },
+    mounted() {
+        this.now = moment().format('YYYY-MM-DD');
+    },
     methods: {
-        async createPoll() {
-            const questionData = {
-                type: this.newPoll.type,
-                start_date: this.newPoll.startDate,
-                end_date: this.newPoll.endDate,
-                question: this.newPoll.questionText,
-                options: this.newPoll.options
-            };
-
-            await axios.post('/api/poll/create', questionData);
-
-            this.showModal = false;
-            this.resetForm();
-            this.$emit('pollCreated');
+        onImageChange(e) {
+            this.selectedImage = e.target.files[0];
+        },
+        onVideoChange(e) {
+            this.selectedVideo = e.target.files[0];
         },
         addOption() {
             this.newPoll.options.push({ option_text: '' });
         },
         resetForm() {
-            this.newPoll = { question: '', options: [{ option_text: '' }] };
+            this.newPoll = { questionText: '', type: 'radio', options: [{ option_text: '' }], startDate: null, endDate: null };
+            this.selectedImage = null;
+            this.selectedVideo = null;
+        },
+        async createPoll() {
+            const formData = new FormData();
+            formData.append('question', this.newPoll.questionText);
+            formData.append('type', this.newPoll.type);
+            formData.append('start_date', moment(this.newPoll.startDate).format('YYYY-MM-DD HH:mm:ss'));
+            formData.append('end_date', moment(this.newPoll.endDate).format('YYYY-MM-DD HH:mm:ss'));
+
+            // Append each option as a separate field
+            this.newPoll.options.forEach((option, index) => {
+                formData.append(`options[${index}][option_text]`, option.option_text);
+            });
+
+            if (this.selectedImage) {
+                formData.append('image', this.selectedImage);
+            }
+
+            if (this.selectedVideo) {
+                formData.append('video', this.selectedVideo);
+            }
+
+            try {
+                await axios.post('/api/poll/create', formData, {
+                    headers: {
+                        'Content-Type': 'multipart/form-data'
+                    }
+                });
+                this.showModal = false;
+                this.resetForm();
+                this.$emit('pollCreated');
+            } catch (error) {
+                this.errors = error.response.data.errors;
+                console.error(error);
+            }
         }
-    },
+    }
 };
 </script>
 <style scoped>

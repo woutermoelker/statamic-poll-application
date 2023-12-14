@@ -61,6 +61,7 @@
                         class="mt-3 bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
                     Close
                 </button>
+                <Errors :errors="errors"></Errors>
             </div>
         </div>
     </div>
@@ -69,9 +70,10 @@
 <script>
 import {PencilIcon} from '@heroicons/vue/24/outline';
 import axios from 'axios';
+import Errors from "./Errors.vue";
 
 export default {
-    components:{PencilIcon},
+    components:{Errors, PencilIcon},
     props: {
         question: {
             type: Object,
@@ -80,6 +82,7 @@ export default {
     },
     data() {
         return {
+            errors: [],
             showModal: false,
         };
     },
@@ -97,9 +100,14 @@ export default {
                 end_date: this.question.end_date,
                 type: this.question.type,
                 options: this.question.options
+            }) .then(response => {
+                this.$emit('pollUpdated', response.data);
+                this.showModal = false;
+            }).catch(error => {
+                this.errors = error.response.data.errors;
+                console.log(error);
             });
 
-            this.showModal = false;
             this.$emit('pollUpdated');
         }
     },

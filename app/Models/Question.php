@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Scopes\AvailableScope;
 use Database\Factories\QuestionFactory;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -20,6 +21,12 @@ class Question extends Model
         'media_path',
     ];
 
+    protected $casts = [
+        'start_date' => 'datetime',
+        'end_date' => 'datetime',
+    ];
+
+
     protected $withCount = [
         'votes'
     ];
@@ -37,6 +44,8 @@ class Question extends Model
     protected static function boot()
     {
         parent::boot();
+
+        static::addGlobalScope(new AvailableScope());
 
         static::deleting(function ($question) {
             $question->options()->getQuery()->delete();
