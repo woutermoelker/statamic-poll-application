@@ -1,0 +1,6 @@
+name: 'Wouter Moelker'
+super: true
+roles:
+  - admin
+id: efae2f12-56ea-40a5-ba24-9c91e40618c4
+password_hash: $2y$10$f.hzoZh6snHuRNvG4.dx9O2/YVT3Ch.ngeMZJs3mj1s7mIKUAIV8K

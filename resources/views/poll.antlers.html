@@ -1,0 +1,6 @@
+
+{{ if current_user.super }}
+<poll-component :is-super="true"></poll-component>
+{{ else }}
+<poll-component></poll-component>
+{{ endif }}
