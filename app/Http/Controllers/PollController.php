@@ -17,8 +17,9 @@ class PollController extends Controller
     {
         $currentDate = Carbon::now();
 
-        $questions = Question::with('options')->orderBy('votes_count', 'desc')
-            ->get();
+        $questions = Question::with(['options' => function ($query) {
+            $query->orderBy('votes_count', 'desc');
+        }])->get();
 
         return response()->json($questions);
     }
