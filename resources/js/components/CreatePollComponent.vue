@@ -45,7 +45,7 @@
 
                         <div class="mb-4" v-if="newPoll.startDate">
                             <label class="block text-gray-700 text-sm font-bold mb-2" for="pollQuestion">Available till:</label>
-                            <DatePicker v-model="newPoll.endDate" :lowerLimit="newPoll.startDate || new Date()" name="end_date" id="end_date" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"></DatePicker>
+                            <DatePicker v-model="newPoll.endDate" :lowerLimit="newPoll.startDate" name="end_date" id="end_date" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"></DatePicker>
                         </div>
 
                         <div class="mb-4">
@@ -119,7 +119,7 @@ export default {
         };
     },
     mounted() {
-        this.newPoll.startDate =new Date();
+        // this.newPoll.startDate =new Date();
     },
     methods: {
         onImageChange(e) {
@@ -132,20 +132,23 @@ export default {
             this.newPoll.options.push({ option_text: '' });
         },
         resetForm() {
-            this.newPoll = { questionText: '', type: 'radio', options: [{ option_text: '' }], startDate: null, endDate: null };
+            this.newPoll = { questionText: '', type: 'radio', options: [{ option_text: '' }], startDate: '', endDate: '' };
             this.selectedImage = null;
             this.selectedVideo = null;
         },
         async createPoll() {
 
+            let startDate = '';
+            let endDate = '';
+
             if(this.newPoll.startDate) {
-                this.newPoll.startDate = moment(this.newPoll.startDate).format('YYYY-MM-DD');
+                startDate = moment(this.newPoll.startDate).format('YYYY-MM-DD');
             } else {
                 this.newPoll.startDate = '';
             }
 
             if(this.newPoll.endDate) {
-                this.newPoll.endDate = moment(this.newPoll.endDate).format('YYYY-MM-DD');
+                endDate = moment(this.newPoll.endDate).format('YYYY-MM-DD');
             } else {
                 this.newPoll.endDate = '';
             }
@@ -153,8 +156,8 @@ export default {
             const formData = new FormData();
             formData.append('question', this.newPoll.questionText);
             formData.append('type', this.newPoll.type);
-            formData.append('start_date', this.newPoll.startDate);
-            formData.append('end_date', this.newPoll.endDate);
+            formData.append('start_date', startDate);
+            formData.append('end_date', endDate);
 
             // Append each option as a separate field
             this.newPoll.options.forEach((option, index) => {
@@ -176,7 +179,7 @@ export default {
                     }
                 });
                 this.showModal = false;
-                this.resetForm();
+                // this.resetForm();
                 this.$emit('pollCreated');
             } catch (error) {
                 this.errors = error.response.data.errors;
