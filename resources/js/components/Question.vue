@@ -65,7 +65,7 @@ function isChecked(option) {
 }
 
 function calculatePercentage(votes) {
-    const highestVotes = Math.max(...this.props.question.options.map(option => option.votes_count));
+    const highestVotes = Math.max(...props.question.options.map(option => option.votes_count));
     if (highestVotes === 0) return '0.00'; // Handle case with no votes
     return ((votes / highestVotes) * 100).toFixed(2);
 }
