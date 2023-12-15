@@ -2,9 +2,9 @@
     <div class="grid grid-cols-1 md:grid-cols-3 mb-20 gap-6">
         <div v-for="question in questions" :key="question.id">
             <div class="max-w-sm grid grid-cols-1 pb-6 rounded overflow-hidden relative shadow-lg p-4" v-if="question.is_visible">
-                <div class="max-h-40" v-if="question.media_path">
+                <div class="h-48 overflow-hidden flex justify-center items-center pt-4" v-if="question.media_path">
                     <!-- Display Image if it's an image -->
-                    <img v-if="isImage(question.media_path)" :src="'/storage/' + question.media_path" alt="Poll Media">
+                    <img class="h-full " v-if="isImage(question.media_path)" :src="'/storage/' + question.media_path" alt="Poll Media">
                     <!-- Display Video if it's a video -->
                     <video v-if="isVideo(question.media_path)" controls>
                         <source :src="'/storage/' + question.media_path" type="video/mp4">

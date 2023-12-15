@@ -179,7 +179,7 @@ export default {
                     }
                 });
                 this.showModal = false;
-                // this.resetForm();
+                this.resetForm();
                 this.$emit('pollCreated');
             } catch (error) {
                 this.errors = error.response.data.errors;
